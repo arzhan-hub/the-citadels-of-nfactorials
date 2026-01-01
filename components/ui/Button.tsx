@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from 'react';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'ghost';
+  variant?: 'primary' | 'ghost' | 'pill';
 };
 
 export function Button({
@@ -15,6 +15,8 @@ export function Button({
   const styles =
     variant === 'ghost'
       ? 'bg-transparent text-[var(--foreground)] hover:bg-[var(--surface-2)]'
+      : variant === 'pill'
+      ? 'border border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--foreground)]'
       : 'bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90';
 
   return <button type={type} className={`${base} ${styles} ${className}`} {...props} />;

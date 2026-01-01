@@ -1,5 +1,9 @@
-import Link from 'next/link';
+'use client';
+
 import { Card } from '@/components/ui/Card';
+import { PortalLink } from '@/components/ui/PortalLink';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { translateCharacterName } from '@/lib/i18n/characterTranslations';
 
 export interface CharacterSummary {
   id: number;
@@ -11,8 +15,11 @@ export interface CharacterSummary {
 }
 
 export function CharacterCard({ character }: { character: CharacterSummary }) {
+  const { t, lang } = useI18n();
+  const displayName = translateCharacterName(character.name, lang);
+
   return (
-    <Link href={`/characters/${character.id}`} className="group block h-full">
+    <PortalLink href={`/characters/${character.id}`} className="group block h-full">
       <Card className="flex h-full flex-col overflow-hidden transition-transform duration-300 hover:-translate-y-1">
         <div className="relative h-56 w-full">
           <img src={character.image} alt={character.name} className="h-full w-full object-cover" />
@@ -32,12 +39,14 @@ export function CharacterCard({ character }: { character: CharacterSummary }) {
         </div>
         <div className="flex flex-1 flex-col gap-2 p-5">
           <h3 className="text-xl font-bold text-[var(--foreground)] group-hover:text-[var(--accent)]">
-            {character.name}
+            {displayName}
           </h3>
           <p className="text-sm font-medium text-[var(--accent)]">{character.species}</p>
-          <p className="text-sm text-[var(--muted)]">Last location: {character.location.name}</p>
+          <p className="text-sm text-[var(--muted)]">
+            {t('character.lastLocation')}: {character.location.name}
+          </p>
         </div>
       </Card>
-    </Link>
+    </PortalLink>
   );
 }

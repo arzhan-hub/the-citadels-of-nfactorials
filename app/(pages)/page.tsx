@@ -7,11 +7,13 @@ import { CharacterCardSkeleton } from '@/components/features/characters/Characte
 import { TruthTortoise } from '@/components/features/ai/TruthTortoise';
 import { Button } from '@/components/ui/Button';
 import { useCharacters } from '@/lib/hooks/useCharacters';
+import { useI18n } from '@/lib/i18n/I18nProvider';
 
 export default function CharactersPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const { characters, totalPages, loading } = useCharacters(search, page);
+  const { t } = useI18n();
 
   useEffect(() => {
     setPage(1);
@@ -20,11 +22,9 @@ export default function CharactersPage() {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-12">
       <section className="space-y-3">
-        <p className="text-sm uppercase tracking-[0.2em] text-[var(--accent)]">Citadel database</p>
-        <h1 className="text-4xl font-bold text-[var(--foreground)] md:text-5xl">Character search</h1>
-        <p className="max-w-2xl text-base text-[var(--muted)]">
-          Browse every known character from the multiverse. Use search to filter and pagination for deep dives.
-        </p>
+        <p className="text-sm uppercase tracking-[0.2em] text-[var(--accent)]">{t('characters.subtitle')}</p>
+        <h1 className="text-4xl font-bold text-[var(--foreground)] md:text-5xl">{t('characters.title')}</h1>
+        <p className="max-w-2xl text-base text-[var(--muted)]">{t('characters.description')}</p>
       </section>
 
       <section className="flex flex-col gap-8">
@@ -39,24 +39,24 @@ export default function CharactersPage() {
         ) : (
           <CharacterList
             characters={characters}
-            emptyMessage={`No characters found for "${search || 'all'}".`}
+            emptyMessage={t('characters.empty', { query: search || t('common.all') })}
           />
         )}
 
         {characters.length > 0 ? (
           <div className="flex flex-wrap items-center justify-between gap-4">
             <Button variant="ghost" onClick={() => setPage((prev) => Math.max(1, prev - 1))} disabled={page === 1}>
-              Previous
+              {t('pagination.prev')}
             </Button>
             <span className="text-sm text-[var(--muted)]">
-              Page <span className="font-semibold text-[var(--foreground)]">{page}</span> of {totalPages}
+              {t('pagination.pageOf', { page, total: totalPages })}
             </span>
             <Button
               variant="ghost"
               onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
               disabled={page === totalPages}
             >
-              Next
+              {t('pagination.next')}
             </Button>
           </div>
         ) : null}

@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { useI18n } from '@/lib/i18n/I18nProvider';
 
 type Theme = 'light' | 'dark';
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>('light');
+  const { t } = useI18n();
 
   useEffect(() => {
     const stored = localStorage.getItem('theme') as Theme | null;
@@ -24,8 +26,8 @@ export function ThemeToggle() {
   };
 
   return (
-    <Button variant="ghost" onClick={toggleTheme} aria-label="Toggle theme">
-      {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+    <Button variant="pill" onClick={toggleTheme} aria-label="Toggle theme">
+      {theme === 'dark' ? t('theme.light') : t('theme.dark')}
     </Button>
   );
 }

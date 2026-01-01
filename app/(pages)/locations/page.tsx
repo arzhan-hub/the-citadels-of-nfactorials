@@ -6,6 +6,7 @@ import { LocationSearch } from '@/components/features/locations/LocationSearch';
 import { LocationCardSkeleton } from '@/components/features/locations/LocationCardSkeleton';
 import { Button } from '@/components/ui/Button';
 import { useLocations } from '@/lib/hooks/useLocations';
+import { useI18n } from '@/lib/i18n/I18nProvider';
 
 export default function LocationsPage() {
   const [name, setName] = useState('');
@@ -13,6 +14,7 @@ export default function LocationsPage() {
   const [dimension, setDimension] = useState('');
   const [page, setPage] = useState(1);
   const { locations, totalPages, loading } = useLocations(name, type, dimension, page);
+  const { t } = useI18n();
 
   useEffect(() => {
     setPage(1);
@@ -21,11 +23,9 @@ export default function LocationsPage() {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-12">
       <section className="space-y-3">
-        <p className="text-sm uppercase tracking-[0.2em] text-[var(--accent)]">Map</p>
-        <h1 className="text-4xl font-bold text-[var(--foreground)] md:text-5xl">Locations</h1>
-        <p className="max-w-2xl text-base text-[var(--muted)]">
-          Filter locations by name, type, or dimension. Explore everything from Earths to pocket realms.
-        </p>
+        <p className="text-sm uppercase tracking-[0.2em] text-[var(--accent)]">{t('locations.subtitle')}</p>
+        <h1 className="text-4xl font-bold text-[var(--foreground)] md:text-5xl">{t('locations.title')}</h1>
+        <p className="max-w-2xl text-base text-[var(--muted)]">{t('locations.description')}</p>
       </section>
 
       <section className="flex flex-col gap-8">
@@ -47,24 +47,24 @@ export default function LocationsPage() {
         ) : (
           <LocationList
             locations={locations}
-            emptyMessage={`No locations found for "${name || type || dimension || 'all'}".`}
+            emptyMessage={t('locations.empty', { query: name || type || dimension || t('common.all') })}
           />
         )}
 
         {locations.length > 0 ? (
           <div className="flex flex-wrap items-center justify-between gap-4">
             <Button variant="ghost" onClick={() => setPage((prev) => Math.max(1, prev - 1))} disabled={page === 1}>
-              Previous
+              {t('pagination.prev')}
             </Button>
             <span className="text-sm text-[var(--muted)]">
-              Page <span className="font-semibold text-[var(--foreground)]">{page}</span> of {totalPages}
+              {t('pagination.pageOf', { page, total: totalPages })}
             </span>
             <Button
               variant="ghost"
               onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
               disabled={page === totalPages}
             >
-              Next
+              {t('pagination.next')}
             </Button>
           </div>
         ) : null}

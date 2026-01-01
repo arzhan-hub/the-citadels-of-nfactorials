@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { CharacterDetail, type CharacterDetailData } from '@/components/features/characters/CharacterDetail';
 import { CharacterDetailSkeleton } from '@/components/features/characters/CharacterDetailSkeleton';
+import { CharacterVariants } from '@/components/features/characters/CharacterVariants';
 import { TruthTortoise } from '@/components/features/ai/TruthTortoise';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { PortalLink } from '@/components/ui/PortalLink';
 
 export default function CharacterPage() {
   const { id } = useParams();
   const [character, setCharacter] = useState<CharacterDetailData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useI18n();
 
   useEffect(() => {
     const fetchCharacter = async () => {
@@ -35,17 +38,20 @@ export default function CharacterPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-6 py-12">
-      <Link href="/">
-        <Button variant="ghost">← Back to search</Button>
-      </Link>
+      <PortalLink href="/">
+        <Button variant="ghost">{t('character.back')}</Button>
+      </PortalLink>
 
       {loading ? (
         <CharacterDetailSkeleton />
       ) : character ? (
-        <CharacterDetail character={character} />
+        <>
+          <CharacterDetail character={character} />
+          <CharacterVariants characterId={character.id} characterName={character.name} />
+        </>
       ) : (
         <div className="rounded-2xl border border-dashed border-[var(--border)] py-20 text-center text-[var(--muted)]">
-          Character not found.
+          {t('character.notFound')}
         </div>
       )}
       <TruthTortoise context={context} />

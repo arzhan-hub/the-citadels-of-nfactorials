@@ -1,4 +1,8 @@
+'use client';
+
 import { Card } from '@/components/ui/Card';
+import { useI18n } from '@/lib/i18n/I18nProvider';
+import { translateCharacterName } from '@/lib/i18n/characterTranslations';
 
 export interface CharacterDetailData {
   id: number;
@@ -14,6 +18,9 @@ export interface CharacterDetailData {
 }
 
 export function CharacterDetail({ character }: { character: CharacterDetailData }) {
+  const { t, lang } = useI18n();
+  const displayName = translateCharacterName(character.name, lang);
+
   return (
     <Card className="overflow-hidden">
       <div className="flex flex-col md:flex-row">
@@ -22,7 +29,7 @@ export function CharacterDetail({ character }: { character: CharacterDetailData 
         </div>
         <div className="flex flex-1 flex-col gap-5 p-6 md:p-8">
           <div>
-          <h1 className="text-3xl font-bold text-[var(--foreground)]">{character.name}</h1>
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">{displayName}</h1>
             <div className="mt-3 flex items-center gap-3">
               <span
                 className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${
@@ -41,20 +48,22 @@ export function CharacterDetail({ character }: { character: CharacterDetailData 
 
           <div className="grid gap-4 text-sm text-[var(--muted)]">
             <div>
-              <p className="text-xs uppercase text-[var(--muted-2)]">Gender</p>
+              <p className="text-xs uppercase text-[var(--muted-2)]">{t('character.gender')}</p>
               <p className="text-base text-[var(--foreground)]">{character.gender}</p>
             </div>
             <div>
-              <p className="text-xs uppercase text-[var(--muted-2)]">Origin</p>
+              <p className="text-xs uppercase text-[var(--muted-2)]">{t('character.origin')}</p>
               <p className="text-base text-[var(--foreground)]">{character.origin.name}</p>
             </div>
             <div>
-              <p className="text-xs uppercase text-[var(--muted-2)]">Last Known Location</p>
+              <p className="text-xs uppercase text-[var(--muted-2)]">{t('character.lastLocation')}</p>
               <p className="text-base text-[var(--accent)]">{character.location.name}</p>
             </div>
             <div>
-              <p className="text-xs uppercase text-[var(--muted-2)]">Episodes</p>
-              <p className="text-base text-[var(--foreground)]">{character.episode.length} episodes</p>
+              <p className="text-xs uppercase text-[var(--muted-2)]">{t('character.episodes')}</p>
+              <p className="text-base text-[var(--foreground)]">
+                {character.episode.length} {t('character.episodes')}
+              </p>
             </div>
           </div>
         </div>
