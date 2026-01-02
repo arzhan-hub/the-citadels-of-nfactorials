@@ -41,9 +41,6 @@ export function EpisodeCard({ episode }: { episode: EpisodeSummary }) {
             {t('episode.airDate')}: {episode.air_date}
           </p>
           <p>
-            {t('episode.created')}: {formatDate(episode.created, locale)}
-          </p>
-          <p>
             {t('episode.characters')}: {episode.characters.length}
           </p>
         </div>
