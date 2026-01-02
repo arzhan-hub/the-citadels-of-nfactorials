@@ -12,18 +12,6 @@ export interface EpisodeDetailData {
   characters: string[];
 }
 
-function formatDate(value: string, locale: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-  return date.toLocaleDateString(locale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-}
-
 export function EpisodeDetail({
   episode,
   description,
@@ -33,8 +21,7 @@ export function EpisodeDetail({
   description?: string;
   source?: string;
 }) {
-  const { t, lang } = useI18n();
-  const locale = lang === 'kk' ? 'kk-KZ' : 'ru-RU';
+  const { t } = useI18n();
 
   return (
     <Card className="flex flex-col gap-6 p-6">
@@ -45,9 +32,6 @@ export function EpisodeDetail({
       <div className="grid gap-3 text-sm text-[var(--muted)] sm:grid-cols-2">
         <p>
           {t('episode.airDate')}: {episode.air_date}
-        </p>
-        <p>
-          {t('episode.created')}: {formatDate(episode.created, locale)}
         </p>
         <p>
           {t('episode.characters')}: {episode.characters.length}
